@@ -1,62 +1,68 @@
 'use client';
 
-import { useEffect, useRef } from "react";
-import { useAudio } from "./AudioContext";
+import React, { useRef, useEffect } from "react";
+import YouTube from "react-youtube";
+import { useSettings } from "./settingsContext";
 
 export default function LofiBackground() {
-  const { audio } = useAudio();
+  const { audio, video, volume } = useSettings(); // volume ∈ [0, 1]
   const playerRef = useRef(null);
-  const ytPlayer = useRef(null);
-  const videoId = "hxkuVG2GmSM";
+  const videoId = video || "hxkuVG2GmSM";
+
+  const onPlayerReady = (event) => {
+    playerRef.current = event.target;
+    event.target.setLoop(true); // YouTube will loop if playlist is also set
+    event.target.playVideo();
+
+    const scaledVolume = Math.round((volume ?? 0.5) * 100);
+    event.target.setVolume(scaledVolume);
+
+    if (!audio) {
+      event.target.mute();
+    }
+  };
 
   useEffect(() => {
-    if (window.YT && window.YT.Player) {
-      createPlayer();
-    } else {
-      const tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      window.onYouTubeIframeAPIReady = createPlayer;
-      document.body.appendChild(tag);
-    }
-
-    function createPlayer() {
-      if (!playerRef.current) return;
-
-      ytPlayer.current = new window.YT.Player(playerRef.current, {
-        videoId,
-        playerVars: {
-          autoplay: 1,
-          controls: 0,
-          loop: 1,
-          playlist: videoId,
-          modestbranding: 1,
-          rel: 0,
-          showinfo: 0,
-          disablekb: 1,
-          className: "w-full h-full"
-        },
-        events: {
-          onReady: (event) => {
-            event.target.mute();
-            event.target.playVideo();
-          }
-        }
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (ytPlayer.current && ytPlayer.current.mute) {
-      audio ? ytPlayer.current.unMute() : ytPlayer.current.mute();
+    if (playerRef.current) {
+      audio ? playerRef.current.unMute() : playerRef.current.mute();
     }
   }, [audio]);
 
+  useEffect(() => {
+    if (playerRef.current && typeof volume === 'number') {
+      const scaledVolume = Math.round(volume * 100);
+      playerRef.current.setVolume(scaledVolume);
+    }
+  }, [volume]);
+
+  const opts = {
+    height: '100%',
+    width: '100%',
+    playerVars: {
+      autoplay: 1,
+      controls: 0,
+      loop: 1,
+      playlist: videoId,
+      modestbranding: 1,
+      rel: 0,
+      showinfo: 0,
+      disablekb: 1,
+    },
+  };
+
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
-      <div ref={playerRef} className="absolute top-0 left-0 w-full h-[120vh] scale-125 pointer-events-none"
-        style={{
-          transform: "translateY(-10vh)",
-        }} />
+      <div
+        className="absolute top-0 left-0 w-full h-[120vh] scale-125 pointer-events-none"
+        style={{ transform: "translateY(-10vh)" }}
+      >
+        <YouTube
+          videoId={videoId}
+          opts={opts}
+          onReady={onPlayerReady}
+          className="w-full h-full"
+        />
+      </div>
     </div>
   );
 }

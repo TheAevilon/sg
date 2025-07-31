@@ -1,7 +1,5 @@
 import { Baloo_Bhai_2, Sirin_Stencil } from "next/font/google";
 import "./globals.css";
-import Bg from "./dashboard/components/bg";
-import { AudioProvider } from "./dashboard/components/AudioContext";
 const sirinStencil = Sirin_Stencil({
   variable: "--font-sirin-stencil",
   subsets: ["latin"],
@@ -25,10 +23,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${balooBhai2.variable} ${sirinStencil.variable} antialiased`}
       >
-        <AudioProvider>
-          <Bg />
-          {children}
-        </AudioProvider>
+        {children}
       </body>
     </html >
   );

@@ -1,17 +1,21 @@
 "use client"
 import { useEffect, useReducer, useState } from "react"
-const clock = () => {
+import { useSettings } from "./settingsContext.jsx";
 
-  const [time, setTime] = useState(10)
-  const [sessionBreak, setBreak] = useState(5)
+
+const clock = () => {
+  const {
+    time,
+    sessionBreak
+  } = useSettings();
   const [session, setSession] = useState(1)
 
-  const initialState = {
-    time: time,
+  const init = (time) => ({
+    time,
+    initialTime: time,
     running: false,
     status: 'Time',
-  }
-
+  });
   const reducer = (state, action) => {
     switch (action.type) {
       case 'tickTime': {
@@ -19,7 +23,7 @@ const clock = () => {
           ...state,
           time: state.time > 0 && state.time - 1,
           status: state.time === 0 ? 'Break' : 'Time',
-          running: state.time > 1
+          running: state.status != 0
         };
       }
       case 'tickBreak': {
@@ -27,40 +31,41 @@ const clock = () => {
           ...state,
           time: state.time > 0 && state.time - 1,
           status: state.time === 0 ? 'Time' : 'Break',
-          running: state.time > 1,
+          running: state.time != 0,
         };
       }
       case 'resume':
-        console.log(state.status)
         return { ...state, running: true };
-      case 'finishTime': {
+      case 'startBreak': {
         setSession(session + 1)
         return {
           ...state,
           time: sessionBreak,
-          running: true
+          running: false
         };
       }
-      case 'finishBreak': {
+      case 'startTime': {
         return {
           ...state,
           time: time,
-          running: true
+          running: false
         };
       }
       case 'pause':
         return { ...state, running: false };
       case 'reset':
-        return { ...initialState };
+        return init(time);
       default:
         return state;
     }
   }
 
-  const [clock, dispatch] = useReducer(reducer, initialState)
+  const [clock, dispatch] = useReducer(reducer, time, init)
 
   useEffect(() => {
-    dispatch({ type: `finish${clock.status}` })
+    if (clock.time == 0) {
+      dispatch({ type: `start${clock.status}` })
+    }
   }, [clock.status])
 
 
@@ -82,6 +87,8 @@ const clock = () => {
   return (
     <div>
       <h1 className="text-8xl fontStencil " onClick={() => dispatch({ type: clock.running ? 'pause' : 'resume' })} >{formatTime(clock.time)}</h1>
+      <h2>{session}</h2>
+      {clock.initialTime !== time && (<button onClick={() => dispatch({ type: 'reset' })} type="">change your clock to the saved settings?</button>)}
     </div>
   )
 }
