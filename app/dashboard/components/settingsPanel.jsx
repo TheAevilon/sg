@@ -45,7 +45,13 @@ const settingsPanel = () => {
 
       <p>Now Playing: {video}</p>
 
-      <button onClick={() => changeVideo(prompt("video id", video) ? true : video)} type="">change video</button>
+      <button onClick={() => {
+        const videoId = prompt("Enter YouTube video ID:", video);
+        if (videoId && videoId.trim() !== "") {
+          changeVideo(videoId.trim());
+        }
+      }}
+        type="">change video</button>
       <div className="flex flex-col">
         <label htmlFor="time">Study time duration in Minutes</label>
         <input id='time' type="number" onChange={handleChange} name="time" value={studyTime / 60}></input>

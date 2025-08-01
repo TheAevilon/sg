@@ -24,3 +24,31 @@ body {
 .fontBalooBhai {
   font-family: var(--font-baloo-bhai-2);
 }
+
+.bg-yt {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.bg-yt iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100vw;
+  min-height: 56.25vw;
+  width: 177.78vh;
+  height: 100vh;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+@media (min-aspect-ratio: 16/9) {
+  .bg-yt iframe {
+    width: 100vw;
+    height: 56.25vw;
+    min-width: 100vw;
+    min-height: 100vh;
+  }
+}

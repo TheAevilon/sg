@@ -53,11 +53,11 @@ export default function LofiBackground() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       <div
-        className="absolute top-0 left-0 w-full h-[120vh] scale-125 pointer-events-none"
-        style={{ transform: "translateY(-10vh)" }}
+        className="bg-yt"
       >
         <YouTube
           videoId={videoId}
+          key={videoId}
           opts={opts}
           onReady={onPlayerReady}
           className="w-full h-full"
