@@ -5,7 +5,7 @@ import YouTube from "react-youtube";
 import { useSettings } from "./settingsContext";
 
 export default function LofiBackground() {
-  const { audio, video, volume } = useSettings(); // volume ∈ [0, 1]
+  const { audio, video, volume, source, pictureURL } = useSettings(); // volume ∈ [0, 1]
   const playerRef = useRef(null);
   const videoId = video || "hxkuVG2GmSM";
 
@@ -49,20 +49,37 @@ export default function LofiBackground() {
       disablekb: 1,
     },
   };
+  if (source === 'youtube') {
 
-  return (
-    <div className="fixed inset-0 -z-10 overflow-hidden">
-      <div
-        className="bg-yt"
-      >
-        <YouTube
-          videoId={videoId}
-          key={videoId}
-          opts={opts}
-          onReady={onPlayerReady}
-          className="w-full h-full"
-        />
+
+    return (
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div
+          className="bg-yt"
+        >
+          <YouTube
+            videoId={videoId}
+            key={videoId}
+            opts={opts}
+            onReady={onPlayerReady}
+            className="w-full h-full"
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+
+  console.log(pictureURL)
+  if (source === 'picture') {
+    return (
+      <div
+        className="fixed inset-0 -z-10 overflow-hidden bg-cover bg-center"
+        style={{
+          backgroundImage: `url('${pictureURL}')`,
+        }}
+      >
+      </div>
+    );
+  }
 }
