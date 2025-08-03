@@ -4,7 +4,9 @@ import { useState } from "react";
 import { useSettings } from "./settingsContext";
 import { URL, images } from "./picutreSource";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
+const BandcampEmbed = dynamic(() => import('./music'), { ssr: false });
 
 const settingsPanel = () => {
 
@@ -57,10 +59,14 @@ const settingsPanel = () => {
   }
 
   return (<>
-    <div className={`text-white flex justify-center items-center flex-col bg-black w-max h-max ${!toggle && 'hidden'}`}>
+    <div className={`text-white flex justify-center items-center flex-col  bg-black w-max h-max ${!toggle && 'hidden'}`}>
       <div>
         <span onClick={() => setMode('background')} className={mode === 'background' ? 'text-white font-bold' : 'text-slate-600'} >background</span>
         <span onClick={() => setMode('time')} className={mode === 'time' ? 'text-white font-bold' : 'text-slate-600'}>Time</span>
+        <span onClick={() => setMode('music')} className={mode === 'music' ? 'text-white font-bold' : 'text-slate-600'}>Music</span>
+      </div>
+      <div className={`flex flex-col ${mode === "music" ? 'block' : 'hidden'}`}>
+        {source === 'youtube' ? "thus us youtube video so you can adjust volume in background section" : (<BandcampEmbed />)}
       </div>
       <div className={`flex flex-col ${mode === "background" ? 'block' : 'hidden'}`} >
         <span onClick={() => changeSource('picture')} className={source === 'picture' ? 'text-white font-bold' : 'text-slate-600'} >Picture</span>
