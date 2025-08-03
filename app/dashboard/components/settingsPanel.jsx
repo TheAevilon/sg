@@ -59,61 +59,79 @@ const settingsPanel = () => {
   }
 
   return (<>
-    <div className={`text-white flex justify-center items-center flex-col  bg-black w-max h-max ${!toggle && 'hidden'}`}>
-      <div>
-        <span onClick={() => setMode('background')} className={mode === 'background' ? 'text-white font-bold' : 'text-slate-600'} >background</span>
-        <span onClick={() => setMode('time')} className={mode === 'time' ? 'text-white font-bold' : 'text-slate-600'}>Time</span>
-        <span onClick={() => setMode('music')} className={mode === 'music' ? 'text-white font-bold' : 'text-slate-600'}>Music</span>
-      </div>
-      <div className={`flex flex-col ${mode === "music" ? 'block' : 'hidden'}`}>
-        {source === 'youtube' ? "thus us youtube video so you can adjust volume in background section" : (<BandcampEmbed />)}
-      </div>
-      <div className={`flex flex-col ${mode === "background" ? 'block' : 'hidden'}`} >
-        <span onClick={() => changeSource('picture')} className={source === 'picture' ? 'text-white font-bold' : 'text-slate-600'} >Picture</span>
-        <span onClick={() => changeSource('youtube')} className={source === 'youtube' ? 'text-white font-bold' : 'text-slate-600'} >YouTube</span>
-        <span onClick={() => changeSource('color')} className={source === 'color' ? 'text-white font-bold' : 'text-slate-600'} >Color</span>
 
-        {source === 'picture' && (<>
-          <div className="flex">
-            {images.map(i => (<Image key={i} className={pictureURL === URL(i) ? 'border border-white' : ""} onClick={() => changePicture(URL(i))} src={URL(i)} width={100} height={100} alt={i} />))}
+    <div
+      className="text-white flex justify-center items-center flex-col p-3 bg-[var(--background)] w-[350px] h-max"
+      style={{ display: toggle ? 'flex' : 'none' }}
+    >
+      <div className="w-max flex gap-3" >
+        <span onClick={() => setMode('background')} className={mode === 'background' ? 'cursor-pointer text-white font-bold' : 'text-slate-600 cursor-pointer'} >background</span>
+        <span onClick={() => setMode('time')} className={mode === 'time' ? 'text-white cursor-pointer font-bold' : 'text-slate-600 cursor-pointer'}>Time</span>
+        <span onClick={() => setMode('music')} className={mode === 'music' ? 'text-white cursor-pointer font-bold' : 'text-slate-600 cursor-pointer'}>Music</span>
+      </div>
+
+      <div className="flex ">
+
+
+        <div className="flex flex-col" style={{ display: mode === "music" ? 'flex' : 'none' }}>
+          {source === 'youtube' ? "thus us youtube video so you can adjust volume in background section" : (<BandcampEmbed />)}
+        </div>
+
+        <div className={`flex ${mode === "background" ? 'block' : 'hidden'}`} >
+
+          <div className="flex relative left-0 flex-col">
+            <span onClick={() => changeSource('picture')} className={source === 'picture' ? 'w-max cursor-pointer text-white font-bold' : 'text-slate-600 cursor-pointer w-max'} >Picture</span>
+            <span onClick={() => changeSource('youtube')} className={source === 'youtube' ? 'w-max cursor-pointer text-white font-bold' : 'text-slate-600 cursor-pointer w-max '} >YouTube</span>
+            <span onClick={() => changeSource('color')} className={source === 'color' ? 'w-max cursor-pointer text-white font-bold' : 'text-slate-600 cursor-pointer w-max'} >Color</span>
           </div>
-        </>)
 
-        }
-        {source === 'color' && (<>
-          <div className="flex">
-            {colors.map(i => (<div key={i} className={bgColor === i ? 'border border-white' : ""} onClick={() => changeColor(i)} style={{ background: i, width: 30, height: 30 }} ></div>))}
-          </div>
-        </>)
 
-        }
+          {source === 'picture' && (<>
+            <div className="flex w-[260px] h-auto flex-wrap gap-2 p-2 ">
+              {images.map(i => (<Image key={i} className={pictureURL === URL(i) ? 'cursor-pointer border border-white' : " cursor-pointer"} onClick={() => changePicture(URL(i))} src={URL(i)} width={100} height={100} alt={i} />))}
+            </div>
+          </>)
+          }
+          {source === 'color' && (<>
+            <div className="flex w-[260px]">
+              {colors.map(i => (<div key={i} className={bgColor === i ? 'border border-white cursor-pointer' : "cursor-pointer"} onClick={() => changeColor(i)} style={{ background: i, width: 30, height: 30 }} ></div>))}
+            </div>
+          </>)
 
-        {source === 'youtube' && (<> <button onClick={toggleAudio}>{audio ? 'Mute' : 'Unmute'}</button>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.01}
-            value={volume}
-            onChange={(e) => changeVolume(parseFloat(e.target.value))}
-          />
+          }
 
-          <p>Now Playing: {video}</p>
+          {source === 'youtube' && (<>
+            <div className="flex flex-col w-[260px] h-auto  p-2 ">
+              <button onClick={toggleAudio}>{audio ? 'Mute' : 'Unmute'}</button>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={volume}
+                onChange={(e) => changeVolume(parseFloat(e.target.value))}
+              />
 
-          <button onClick={() => {
-            const videoId = prompt("Enter YouTube video ID:", video);
-            if (videoId && videoId.trim() !== "") {
-              changeVideo(videoId.trim());
-            }
-          }}
-            type="">change video</button> </>)}
-      </div>
-      <div className={`flex flex-col ${mode === "time" ? 'block' : 'hidden'}`} >
-        <label htmlFor="time">Study time duration in Minutes</label>
-        <input id='time' type="number" onChange={handleChange} name="time" value={studyTime / 60}></input>
-        <label htmlFor="break">Break Duration in minutes</label>
-        <input id='break' type="number" onChange={handleChange} name="break" value={breakTime / 60}></input>
-        {time != studyTime || sessionBreak != breakTime ? <button onClick={() => changeTime(parseInt(studyTime)) && changeBreak(parseInt(breakTime))} > save changes </button> : false}
+              <p>Now Playing: {video}</p>
+
+              <button onClick={() => {
+                const videoId = prompt("Enter YouTube video ID:", video);
+                if (videoId && videoId.trim() !== "") {
+                  changeVideo(videoId.trim());
+                }
+              }}
+                type="">change video</button>
+            </div>
+          </>)}
+
+        </div>
+        <div className={`flex flex-col ${mode === "time" ? 'block' : 'hidden'}`} >
+          <label htmlFor="time">Study time duration in Minutes</label>
+          <input id='time' type="number" onChange={handleChange} name="time" value={studyTime / 60}></input>
+          <label htmlFor="break">Break Duration in minutes</label>
+          <input id='break' type="number" onChange={handleChange} name="break" value={breakTime / 60}></input>
+          {time != studyTime || sessionBreak != breakTime ? <button onClick={() => { changeTime(parseInt(studyTime)); changeBreak(parseInt(breakTime)) }} > save changes </button> : false}
+        </div>
       </div>
     </div>
   </>)

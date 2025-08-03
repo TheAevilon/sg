@@ -12,7 +12,7 @@ const clock = () => {
 
   const init = (time) => ({
     time,
-    initialTime: time,
+    initialTime: { time: time, break: sessionBreak },
     running: false,
     status: 'Time',
   });
@@ -86,9 +86,9 @@ const clock = () => {
 
   return (
     <div>
-      <h1 className="text-8xl fontStencil " onClick={() => dispatch({ type: clock.running ? 'pause' : 'resume' })} >{formatTime(clock.time)}</h1>
+      <h1 className="text-8xl cursor-pointer fontStencil " onClick={() => dispatch({ type: clock.running ? 'pause' : 'resume' })} >{formatTime(clock.time)}</h1>
       <h2>{session}</h2>
-      {clock.initialTime !== time && (<button onClick={() => dispatch({ type: 'reset' })} type="">change your clock to the saved settings?</button>)}
+      {(clock.initialTime.time !== time || clock.initialTime.break !== sessionBreak) && (<button onClick={() => dispatch({ type: 'reset' })} type="">change your clock to the saved settings?</button>)}
     </div>
   )
 }

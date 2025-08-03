@@ -8,16 +8,16 @@ const Clock = dynamic(() => import('./components/clock'), { ssr: false })
 
 const page = () => {
   return (
-    <div>
-      <SettingsProvider>
+    <SettingsProvider>
+      <div>
         <Bg />
         <Clock />
         <ToggleAudio />
         <SettingsPanel />
-      </SettingsProvider>
-      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="fixed inset-0 -z-10 overflow-hidden">
+        </div>
       </div>
-    </div>
+    </SettingsProvider>
   )
 }
 

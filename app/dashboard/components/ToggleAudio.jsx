@@ -2,15 +2,12 @@
 import { useSettings } from './settingsContext';
 
 export function ToggleAudio() {
-  const { audio, toggleAudio, changeToggle } = useSettings();
+  const { changeToggle, toggle } = useSettings();
 
   return (
     <>
-      <button onClick={toggleAudio} className="z-50 fixed bottom-4 left-4 bg-black text-white px-4 py-2 rounded">
-        {audio ? '🔈' : '🔇'}
-      </button>
-      <button onClick={changeToggle} className="z-50 fixed bottom-4 left-40 bg-black text-white px-4 py-2 rounded">
-        {'🔧'}
+      <button onClick={changeToggle} className="z-50 fixed bottom-4 left-2 bg-black text-white px-4 py-2 rounded">
+        {!toggle ? '🔧' : 'X'}
       </button>
     </>
   );
