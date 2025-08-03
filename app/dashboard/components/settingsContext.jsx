@@ -12,7 +12,8 @@ export function SettingsProvider({ children }) {
   const [sessionBreak, setBreak] = useState(300)
   const [toggle, setToggle] = useState(false)
   const [source, setSource] = useState("picture")
-  const [pictureURL, setPictureURL] = useState('https://raw.githubusercontent.com/D3Ext/aesthetic-wallpapers/main/images/chill.gif')
+  const [bgColor, setBgColor] = useState("#232a2e")
+  const [pictureURL, setPictureURL] = useState('https://cdn.jsdelivr.net/gh/D3Ext/aesthetic-wallpapers/images/chill.gif')
 
   const toggleAudio = () => setAudio(prev => !prev);
 
@@ -26,6 +27,7 @@ export function SettingsProvider({ children }) {
   const changeBreak = (duration) => setBreak(duration)
   const changeSource = (source) => setSource(source)
   const changePicture = (source) => setPictureURL(source)
+  const changeColor = (color) => setBgColor(color)
   const changeToggle = () => setToggle(!toggle)
 
   return (
@@ -45,7 +47,9 @@ export function SettingsProvider({ children }) {
       source,
       changeSource,
       pictureURL,
-      changePicture
+      changePicture,
+      bgColor,
+      changeColor
     }}>
       {children}
     </SettingsContext.Provider>

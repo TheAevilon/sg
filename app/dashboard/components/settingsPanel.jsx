@@ -23,12 +23,26 @@ const settingsPanel = () => {
     source,
     changeSource,
     pictureURL,
-    changePicture
+    changePicture,
+    bgColor,
+    changeColor
   } = useSettings();
 
   const [studyTime, setStudyTime] = useState(time);
   const [breakTime, setBreakTime] = useState(sessionBreak);
   const [mode, setMode] = useState("background")
+
+  const colors = [
+    '#000',
+    '#232a2e',
+    '#1a1b26',
+    '#24283b',
+    '#2e3440',
+    '#3b4252',
+    '#1e1e2e',
+    '#282c34',
+  ];
+
 
   const handleChange = (e) => {
     let value = e.target.value
@@ -51,11 +65,18 @@ const settingsPanel = () => {
       <div className={`flex flex-col ${mode === "background" ? 'block' : 'hidden'}`} >
         <span onClick={() => changeSource('picture')} className={source === 'picture' ? 'text-white font-bold' : 'text-slate-600'} >Picture</span>
         <span onClick={() => changeSource('youtube')} className={source === 'youtube' ? 'text-white font-bold' : 'text-slate-600'} >YouTube</span>
-        <span onClick={() => changeSource('Color')} className={source === 'Color' ? 'text-white font-bold' : 'text-slate-600'} >Color</span>
+        <span onClick={() => changeSource('color')} className={source === 'color' ? 'text-white font-bold' : 'text-slate-600'} >Color</span>
 
         {source === 'picture' && (<>
           <div className="flex">
             {images.map(i => (<Image key={i} className={pictureURL === URL(i) ? 'border border-white' : ""} onClick={() => changePicture(URL(i))} src={URL(i)} width={100} height={100} alt={i} />))}
+          </div>
+        </>)
+
+        }
+        {source === 'color' && (<>
+          <div className="flex">
+            {colors.map(i => (<div key={i} className={bgColor === i ? 'border border-white' : ""} onClick={() => changeColor(i)} style={{ background: i, width: 30, height: 30 }} ></div>))}
           </div>
         </>)
 
