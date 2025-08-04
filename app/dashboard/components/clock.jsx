@@ -10,11 +10,11 @@ const clock = () => {
   } = useSettings();
   const [session, setSession] = useState(1)
 
-  const init = (time) => ({
+  const init = (time, initialState = {}) => ({
     time,
     initialTime: { time: time, break: sessionBreak },
     running: false,
-    status: 'Time',
+    status: initialState.status || 'Time',
   });
   const reducer = (state, action) => {
     switch (action.type) {
@@ -54,7 +54,7 @@ const clock = () => {
       case 'pause':
         return { ...state, running: false };
       case 'reset':
-        return init(time);
+        return init((state.status === 'Time' ? time : sessionBreak), state)
       default:
         return state;
     }
@@ -87,7 +87,7 @@ const clock = () => {
   return (
     <div>
       <h1 className="text-8xl cursor-pointer fontStencil " onClick={() => dispatch({ type: clock.running ? 'pause' : 'resume' })} >{formatTime(clock.time)}</h1>
-      <h2>{session}</h2>
+      <h2 className="text-2xl fontStencil ">{clock.status === 'Time' ? 'studing' : 'on break'}, session :  {session}</h2>
       {(clock.initialTime.time !== time || clock.initialTime.break !== sessionBreak) && (<button onClick={() => dispatch({ type: 'reset' })} type="">change your clock to the saved settings?</button>)}
     </div>
   )

@@ -69,7 +69,6 @@ export default function LofiBackground() {
     );
   }
 
-  console.log(bgColor)
   if (source === 'picture') {
     return (
       <div

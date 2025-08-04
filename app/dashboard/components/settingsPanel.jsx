@@ -57,6 +57,22 @@ const settingsPanel = () => {
       setBreakTime(value * 60)
     }
   }
+  const updateClock = () => {
+    if (studyTime < 1 || breakTime < 1) {
+      alert(studyTime > 0 ? 'atleast rest for a minute' : 'why are you even here?');
+      return false;
+    }
+    if (breakTime > studyTime / 5) {
+      if (confirm("so break time is too much compared to studyTime do you really want to do that?") == true) {
+
+        changeTime(parseInt(studyTime));
+        changeBreak(parseInt(breakTime));
+      }
+    }
+
+    changeTime(parseInt(studyTime));
+    changeBreak(parseInt(breakTime));
+  }
 
   return (<>
 
@@ -130,7 +146,7 @@ const settingsPanel = () => {
           <input id='time' type="number" onChange={handleChange} name="time" value={studyTime / 60}></input>
           <label htmlFor="break">Break Duration in minutes</label>
           <input id='break' type="number" onChange={handleChange} name="break" value={breakTime / 60}></input>
-          {time != studyTime || sessionBreak != breakTime ? <button onClick={() => { changeTime(parseInt(studyTime)); changeBreak(parseInt(breakTime)) }} > save changes </button> : false}
+          {time != studyTime || sessionBreak != breakTime ? <button onClick={() => updateClock()} > save changes </button> : false}
         </div>
       </div>
     </div>
