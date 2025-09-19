@@ -18,7 +18,7 @@ export default function BandcampEmbed() {
         <iframe
           width="300"
           height="225"
-          src="https://bandcamp.com/EmbeddedPlayer/album=2928402265/size=large/bgcol=333333/linkcol=0f91ff/artwork=small/transparent=true/"
+          src="https://bandcamp.com/EmbeddedPlayer/album=647119282/size=large/bgcol=333333/linkcol=0f91ff/artwork=small/transparent=true/"
           seamless
           style={{ border: '0' }}
         >
